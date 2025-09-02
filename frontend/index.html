@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NovaBlog - Home</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      min-height: 100vh;
+      font-family: 'Poppins', Arial, sans-serif;
+      transition: background 0.7s;
+    }
+    .navbar {
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 4px 24px rgba(255,111,97,0.10);
+      border-radius: 0 0 1.5rem 1.5rem;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: fadeInDown 1s;
+    }
+    .navbar h1 {
+      color: #ff6f61;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      font-weight: 700;
+      margin: 0;
+      transition: color 0.3s;
+    }
+    nav a {
+      color: #ff6f61;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: 500;
+      font-size: 1.08rem;
+      padding: 0.4rem 1rem;
+      border-radius: 1.2rem;
+      transition: background 0.25s, color 0.25s, box-shadow 0.25s, transform 0.18s;
+      position: relative;
+    }
+    nav a.active, nav a:hover, nav a.login-btn:hover {
+      background: linear-gradient(90deg, #ff9472 0%, #ff6f61 100%);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(255,111,97,0.13);
+      transform: translateY(-2px) scale(1.07);
+    }
+    nav a.login-btn {
+      background: #ff6f61;
+      color: #fff;
+      font-weight: 600;
+      margin-left: 1.5rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .hero {
+      max-width: 700px;
+      margin: 3rem auto 2rem auto;
+      background: rgba(255,255,255,0.92);
+      border-radius: 2rem;
+      box-shadow: 0 8px 32px rgba(255,111,97,0.13);
+      padding: 3rem 2rem 2.5rem 2rem;
+      text-align: center;
+      animation: fadeIn 1s;
+      transition: box-shadow 0.4s;
+    }
+    .hero:hover {
+      box-shadow: 0 16px 48px rgba(255,111,97,0.18);
+    }
+    .hero h2 {
+      font-size: 2.7rem;
+      color: #ff6f61;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: color 0.3s;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      color: #444;
+      margin-bottom: 2.2rem;
+      line-height: 1.7;
+      transition: color 0.3s;
+    }
+    .cta-section {
+      margin: 3rem auto 0 auto;
+      text-align: center;
+    }
+    .cta-btn {
+      background: linear-gradient(90deg, #ff6f61 0%, #ff9472 100%);
+      color: #fff;
+      border: none;
+      padding: 0.9rem 2.5rem;
+      border-radius: 2rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1.2rem;
+      box-shadow: 0 4px 16px rgba(255,111,97,0.10);
+      transition: background 0.25s, transform 0.18s, box-shadow 0.25s;
+      letter-spacing: 1px;
+      outline: none;
+    }
+    .cta-btn:hover, .cta-btn:focus {
+      background: linear-gradient(90deg, #ff9472 0%, #ff6f61 100%);
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 32px rgba(255,111,97,0.18);
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2.5rem auto 0 auto;
+      max-width: 900px;
+      animation: fadeIn 1.2s;
+    }
+    .feature-card {
+      background: #fff;
+      border-radius: 1.2rem;
+      box-shadow: 0 4px 24px rgba(255,111,97,0.10);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      width: 260px;
+      text-align: center;
+      transition: transform 0.22s, box-shadow 0.22s, background 0.22s;
+      animation: fadeInUp 1.2s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card:hover {
+      transform: translateY(-8px) scale(1.05) rotate(-1deg);
+      box-shadow: 0 12px 36px rgba(255,111,97,0.18);
+      background: linear-gradient(135deg, #fff6f0 0%, #ffe0d2 100%);
+    }
+    .feature-icon {
+      font-size: 2.5rem;
+      color: #ff6f61;
+      margin-bottom: 0.7rem;
+      transition: color 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .feature-card:hover .feature-icon {
+      color: #ff9472;
+      transform: scale(1.2) rotate(8deg);
+    }
+    .feature-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ff6f61;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+    .feature-card:hover .feature-title {
+      color: #ff9472;
+    }
+    .feature-desc {
+      color: #555;
+      font-size: 1rem;
+      line-height: 1.5;
+      transition: color 0.2s;
+    }
+    .feature-card:hover .feature-desc {
+      color: #222;
+    }
+    @media (max-width: 900px) {
+      .features { flex-direction: column; align-items: center; gap: 1.5rem; }
+      .feature-card { width: 90%; }
+      .hero { padding: 2rem 1rem; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: none;}
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(60px);}
+      to { opacity: 1; transform: none;}
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px);}
+      to { opacity: 1; transform: none;}
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <h1>NovaBlog</h1>
+    <nav></nav>
+  </header>
+  <section class="hero">
+    <h2>Welcome to NovaBlog</h2>
+    <p>
+      NovaBlog is your creative space to <b>read</b>, <b>share</b>, and <b>inspire</b>.<br>
+      Discover stories from around the world or start your own blogging journey.<br>
+      <span style="color:#ff6f61; font-weight:500;">Login to create your own blogs and join our vibrant community!</span>
+    </p>
+    <div class="cta-section">
+      <button class="cta-btn" onclick="window.location.href='login.html'">Login &amp; Start Blogging</button>
+    </div>
+  </section>
+  <section class="features">
+    <div class="feature-card">
+      <div class="feature-icon">📝</div>
+      <div class="feature-title">Create &amp; Manage Blogs</div>
+      <div class="feature-desc">
+        Share your thoughts, stories, and expertise with the world. Edit or delete your blogs anytime.
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-title">Explore Diverse Content</div>
+      <div class="feature-desc">
+        Browse blogs from all users, across categories like Tech, Lifestyle, Travel, and more.
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title">Personalized Experience</div>
+      <div class="feature-desc">
+        Login to unlock the ability to create, edit, and manage your own blogs. Your content, your rules!
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <div class="feature-title">Connect &amp; Inspire</div>
+      <div class="feature-desc">
+        Read, learn, and get inspired by stories from a creative community of bloggers.
+      </div>
+    </div>
+  </section>
+  <script>
+    // Dynamic nav bar
+    const user = JSON.parse(localStorage.getItem("user"));
+    const nav = document.querySelector("nav");
+    nav.innerHTML = `
+      <a href="index.html" class="active">Home</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      ${user ? `
+        <a href="blog.html">Create Blog</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      ` : `
+        <a href="login.html" class="login-btn">Login</a>
+      `}
+    `;
+    if (user) {
+      document.getElementById("logoutBtn").onclick = function() {
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
+      }
+    }
+  </script>
+</body>
+</html>

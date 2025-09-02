@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | NovaBlog</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/blog-listing.css">
+  <style>
+    .dashboard-container {
+      max-width: 900px;
+      margin: 2.5rem auto;
+      background: rgba(255,255,255,0.07);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(255,111,97,0.08);
+      padding: 2rem 2.5rem;
+      color: #222;
+      animation: fadeIn 1s;
+    }
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .dashboard-header h2 {
+      color: #ff6f61;
+      margin: 0;
+    }
+    .dashboard-header .profile-link {
+      background: #ff6f61;
+      color: #fff;
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .dashboard-header .profile-link:hover {
+      background: #ff9472;
+    }
+    .dashboard-section {
+      margin-bottom: 2.5rem;
+    }
+    .dashboard-section h3 {
+      color: #ff6f61;
+      margin-bottom: 1rem;
+    }
+    .dashboard-form label {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: #444;
+      font-size: 1rem;
+    }
+    .dashboard-form input,
+    .dashboard-form select,
+    .dashboard-form textarea {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.7rem;
+      border-radius: 10px;
+      border: 1px solid #eee;
+      font-size: 1rem;
+      transition: border 0.2s;
+      background: #fff;
+      color: #222;
+    }
+    .dashboard-form input:focus,
+    .dashboard-form select:focus,
+    .dashboard-form textarea:focus {
+      border: 1.5px solid #ff6f61;
+      outline: none;
+    }
+    .dashboard-form button {
+      background: linear-gradient(90deg, #ff6f61 0%, #ff9472 100%);
+      color: #fff;
+      border: none;
+      padding: 0.7rem 2rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    .dashboard-form button:hover {
+      background: linear-gradient(90deg, #ff9472 0%, #ff6f61 100%);
+    }
+    .dashboard-blogs {
+      margin-top: 2rem;
+    }
+    .blog-list {
+      gap: 1.5rem;
+      justify-content: flex-start;
+    }
+    .blog-card {
+      width: 320px;
+    }
+    .dashboard-logout {
+      margin-top: 2rem;
+      text-align: right;
+    }
+    .dashboard-logout button {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .dashboard-logout button:hover {
+      background: #ff6f61;
+    }
+    @media (max-width: 900px) {
+      .dashboard-container { padding: 1rem; }
+      .blog-list { gap: 1rem; }
+      .blog-card { width: 100%; }
+    }
+    @media (max-width: 600px) {
+      .dashboard-header { flex-direction: column; gap: 1rem; }
+      .dashboard-container { padding: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <h1>🏠 Dashboard</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="blog.html">Create</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+  </header>
+  <main>
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <h2>Welcome, <span id="dashboardUser">User</span>!</h2>
+        <a href="profile.html" class="profile-link">View Profile</a>
+      </div>
+      <div class="dashboard-section">
+        <h3>Create a New Blog</h3>
+        <form id="blogForm" class="dashboard-form">
+          <label for="title">Title</label>
+          <input type="text" id="title" required>
+          <label for="category">Category</label>
+          <select id="category" required>
+            <option value="">Select category</option>
+            <option value="Tech">Tech</option>
+            <option value="Lifestyle">Lifestyle</option>
+            <option value="Education">Education</option>
+            <option value="Travel">Travel</option>
+          </select>
+          <label for="tags">Tags (comma separated)</label>
+          <input type="text" id="tags" placeholder="e.g. javascript, webdev">
+          <label for="content">Content</label>
+          <textarea id="content" rows="6" required></textarea>
+          <button type="submit">Publish</button>
+        </form>
+      </div>
+      <div class="dashboard-section dashboard-blogs">
+        <h3>Your Blogs</h3>
+        <div class="blog-list" id="dashboardBlogs"></div>
+        <p id="noBlogsMsg" style="color:#888; text-align:center; margin-top:1.5rem;">No blogs created yet.</p>
+      </div>
+      <div class="dashboard-logout">
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </main>
+  <script>
+    // Show logged-in user's name
+    const user = JSON.parse(localStorage.getItem("user")) || { username: "User" };
+    document.getElementById("dashboardUser").textContent = user.username || "User";
+
+    // Logout logic
+    document.getElementById("logoutBtn").onclick = function() {
+      localStorage.removeItem("user");
+      window.location.href = "login.html";
+    };
+
+    // Show user's blogs (from backend)
+    async function fetchDashboardBlogs() {
+      try {
+        const res = await fetch('http://localhost:5000/api/blog');
+        const blogs = await res.json();
+        // Filter blogs by user if your backend supports it (e.g., blog.author === user.username)
+        // For now, show all blogs as demo:
+        const userBlogs = blogs.filter(blog => blog.author === user.username || blog.email === user.email || true); // Adjust as per your schema
+
+        const container = document.getElementById("dashboardBlogs");
+        const noBlogsMsg = document.getElementById("noBlogsMsg");
+        container.innerHTML = "";
+        if (userBlogs.length === 0) {
+          noBlogsMsg.style.display = "block";
+          return;
+        }
+        noBlogsMsg.style.display = "none";
+        userBlogs.forEach(blog => {
+          const card = document.createElement("div");
+          card.className = "blog-card";
+          card.innerHTML = `
+            <h3>${blog.title}</h3>
+            <span class="category">${blog.category || ""}</span>
+            <p>${blog.content.substring(0, 100)}...</p>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        document.getElementById("dashboardBlogs").innerHTML = "<p style='color:red;'>Failed to load blogs.</p>";
+      }
+    }
+
+    // Submit new blog to backend
+    document.getElementById("blogForm").addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("title").value;
+      const category = document.getElementById("category").value;
+      const tags = document.getElementById("tags").value;
+      const content = document.getElementById("content").value;
+      try {
+        const res = await fetch('http://localhost:5000/api/blog', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, category, content, tags })
+        });
+        if (!res.ok) {
+          alert('Failed to publish blog.');
+          return;
+        }
+        document.getElementById("blogForm").reset();
+        fetchDashboardBlogs();
+        alert('Blog published successfully!');
+      } catch (err) {
+        alert('Network error. Please try again.');
+      }
+    });
+
+    // Delete blog from backend
+    async function deleteBlog(id) {
+      if (confirm('Are you sure to delete this blog?')) {
+        try {
+          const res = await fetch(`http://localhost:5000/api/blog/${id}`, { method: 'DELETE' });
+          if (!res.ok) {
+            alert('Failed to delete blog.');
+            return;
+          }
+          fetchDashboardBlogs();
+        } catch (err) {
+          alert('Network error. Please try again.');
+        }
+      }
+    }
+
+    // Initial load
+    fetchDashboardBlogs();
+  </script>
+</body>
+</html>

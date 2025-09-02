@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - NovaBlog</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="navbar">
+    <h1>🔐 Login</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="blog.html">Create</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+  <main class="form-container">
+    <form class="form-box" id="loginForm">
+      <h2>Welcome Back!</h2>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit" class="btn">Login</button>
+      <p style="margin-top:1rem;">Don't have an account? <a href="signup.html">Sign Up</a></p>
+      <div id="message" style="margin-top:1rem;color:red;"></div>
+    </form>
+  </main>
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const messageDiv = document.getElementById("message");
+      messageDiv.textContent = "";
+
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        if (!res.ok) {
+          const errorData = await res.json();
+          messageDiv.textContent = errorData.error || "Login failed";
+          return;
+        }
+
+        const data = await res.json();
+        messageDiv.style.color = "green";
+        messageDiv.textContent = data.message;
+
+        console.log("User Info:", data.user);
+        // Store user info in localStorage
+        localStorage.setItem("user", JSON.stringify({
+          username: data.user.username,
+          email: data.user.email
+        }));
+        // Redirect to dashboard
+        window.location.href = "dashboard.html";
+
+      } catch (err) {
+        messageDiv.textContent = err.message;
+      }
+    });
+  </script>
+</body>
+</html>

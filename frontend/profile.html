@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile | NovaBlog</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .profile-container {
+      max-width: 700px;
+      margin: 2rem auto;
+      background: rgba(255,255,255,0.07);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(255,111,97,0.08);
+      padding: 2rem;
+      color: #222;
+      animation: fadeIn 1s;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff9472 0%, #ff6f61 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: #fff;
+      font-weight: bold;
+    }
+    .profile-details h2 {
+      margin: 0 0 0.3rem 0;
+      color: #ff6f61;
+    }
+    .profile-details p {
+      margin: 0;
+      color: #555;
+    }
+    .profile-blogs {
+      margin-top: 2.5rem;
+    }
+    .profile-blogs h3 {
+      color: #ff6f61;
+      margin-bottom: 1rem;
+    }
+    .blog-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: flex-start;
+    }
+    .blog-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(255,111,97,0.10);
+      padding: 1.2rem 1rem 1rem 1rem;
+      width: 270px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.7s;
+      color: #222;
+    }
+    .blog-card h4 {
+      color: #ff6f61;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    .blog-card .category {
+      display: inline-block;
+      background: #ff9472;
+      color: #fff;
+      border-radius: 12px;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.85rem;
+      margin-bottom: 0.7rem;
+    }
+    .blog-card p {
+      font-size: 0.98rem;
+      color: #444;
+      margin-bottom: 0.7rem;
+    }
+    .blog-card .delete-btn {
+      background: #ff6f61;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 0.3rem 1rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      margin-right: 0.5rem;
+      transition: background 0.2s;
+    }
+    .blog-card .delete-btn:hover {
+      background: #e74c3c;
+    }
+    @media (max-width: 900px) {
+      .profile-container { padding: 1rem; }
+      .blog-list { gap: 1rem; }
+      .blog-card { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <h1>👤 Profile</h1>
+    <nav></nav>
+  </header>
+  <main>
+    <div class="profile-container">
+      <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatar">U</div>
+        <div class="profile-details">
+          <h2 id="profileName">User</h2>
+          <p id="profileEmail">user@email.com</p>
+        </div>
+      </div>
+      <div class="profile-blogs">
+        <h3>Your Blogs</h3>
+        <div class="blog-list" id="userBlogs"></div>
+        <p id="noBlogsMsg" style="color:#888; margin-top:1rem;">No blogs created yet.</p>
+      </div>
+    </div>
+  </main>
+  <script>
+    // Dynamic nav bar
+    const user = JSON.parse(localStorage.getItem("user"));
+    const nav = document.querySelector("nav");
+    nav.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      ${user ? `
+        <a href="blog.html">Create Blog</a>
+        <a href="profile.html" class="active">Profile</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      ` : `
+        <a href="login.html" class="login-btn">Login</a>
+      `}
+    `;
+    if (!user) {
+      window.location.href = "login.html";
+    }
+    if (user) {
+      document.getElementById("logoutBtn").onclick = function() {
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
+      }
+    }
+    // Show user info
+    document.getElementById("profileName").textContent = user.username || "User";
+    document.getElementById("profileEmail").textContent = user.email || "user@email.com";
+    document.getElementById("profileAvatar").textContent = user.username ? user.username[0].toUpperCase() : "U";
+
+    // Fetch and show only user's blogs (adjust filter as per your backend)
+    async function fetchUserBlogs() {
+      try {
+        const res = await fetch('http://localhost:5000/api/blog');
+        const blogs = await res.json();
+        // Filter by user if your backend supports it (e.g., blog.author === user.username)
+        const userBlogs = blogs.filter(blog => blog.author === user.username || blog.email === user.email || true); // Adjust as per your schema
+        const blogList = document.getElementById("userBlogs");
+        const noBlogsMsg = document.getElementById("noBlogsMsg");
+        blogList.innerHTML = "";
+        if (!userBlogs.length) {
+          noBlogsMsg.style.display = "block";
+          return;
+        }
+        noBlogsMsg.style.display = "none";
+        userBlogs.forEach(blog => {
+          const card = document.createElement("div");
+          card.className = "blog-card";
+          card.innerHTML = `
+            <h4>${blog.title}</h4>
+            <span class="category">${blog.category || ""}</span>
+            <p>${blog.content.substring(0, 80)}...</p>
+            <button class="delete-btn" onclick="deleteBlog('${blog.id}')">Delete</button>
+          `;
+          blogList.appendChild(card);
+        });
+      } catch (err) {
+        document.getElementById("userBlogs").innerHTML = "<p style='color:red;'>Failed to load blogs.</p>";
+      }
+    }
+
+    // Delete blog function
+    async function deleteBlog(id) {
+      if (confirm('Are you sure you want to delete this blog?')) {
+        try {
+          const res = await fetch(`http://localhost:5000/api/blog/${id}`, { method: 'DELETE' });
+          if (!res.ok) {
+            alert('Failed to delete blog.');
+            return;
+          }
+          fetchUserBlogs();
+        } catch (err) {
+          alert('Network error. Please try again.');
+        }
+      }
+    }
+    // Make deleteBlog available globally
+    window.deleteBlog = deleteBlog;
+
+    fetchUserBlogs();
+  </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Blog - NovaBlog</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      min-height: 100vh;
+      font-family: 'Poppins', Arial, sans-serif;
+      transition: background 0.7s;
+    }
+    .navbar {
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 4px 24px rgba(255,111,97,0.10);
+      border-radius: 0 0 1.5rem 1.5rem;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: fadeInDown 1s;
+    }
+    .navbar h1 {
+      color: #ff6f61;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      font-weight: 700;
+      margin: 0;
+      transition: color 0.3s;
+    }
+    nav a {
+      color: #ff6f61;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: 500;
+      font-size: 1.08rem;
+      padding: 0.4rem 1rem;
+      border-radius: 1.2rem;
+      transition: background 0.25s, color 0.25s, box-shadow 0.25s, transform 0.18s;
+      position: relative;
+    }
+    nav a.active, nav a:hover, nav a.login-btn:hover {
+      background: linear-gradient(90deg, #ff9472 0%, #ff6f61 100%);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(255,111,97,0.13);
+      transform: translateY(-2px) scale(1.07);
+    }
+    nav a.login-btn {
+      background: #ff6f61;
+      color: #fff;
+      font-weight: 600;
+      margin-left: 1.5rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .create-section {
+      max-width: 600px;
+      margin: 3rem auto 2rem auto;
+      background: rgba(255,255,255,0.92);
+      border-radius: 2rem;
+      box-shadow: 0 8px 32px rgba(255,111,97,0.13);
+      padding: 2.5rem 2rem 2rem 2rem;
+      animation: fadeIn 1s;
+      transition: box-shadow 0.4s;
+    }
+    .create-section h2 {
+      color: #ff6f61;
+      font-size: 2rem;
+      margin-bottom: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    .create-section label {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: #444;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .create-section input,
+    .create-section select,
+    .create-section textarea {
+      width: 100%;
+      margin-bottom: 1.2rem;
+      padding: 0.7rem;
+      border-radius: 10px;
+      border: 1px solid #eee;
+      font-size: 1rem;
+      background: #fff;
+      color: #222;
+      transition: border 0.2s;
+    }
+    .create-section input:focus,
+    .create-section select:focus,
+    .create-section textarea:focus {
+      border: 1.5px solid #ff6f61;
+      outline: none;
+    }
+    .create-section button {
+      background: linear-gradient(90deg, #ff6f61 0%, #ff9472 100%);
+      color: #fff;
+      border: none;
+      padding: 0.7rem 2rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.18s;
+      margin-top: 0.5rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 16px rgba(255,111,97,0.10);
+    }
+    .create-section button:hover {
+      background: linear-gradient(90deg, #ff9472 0%, #ff6f61 100%);
+      transform: scale(1.05);
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px);}
+      to { opacity: 1; transform: none;}
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: none;}
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <h1>✍️ Create Blog</h1>
+    <nav></nav>
+  </header>
+  <main>
+    <section class="create-section">
+      <h2>Write a New Blog</h2>
+      <form id="createBlogForm">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" required placeholder="Enter blog title">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="">Select category</option>
+          <option value="Tech">Tech</option>
+          <option value="Lifestyle">Lifestyle</option>
+          <option value="Education">Education</option>
+          <option value="Travel">Travel</option>
+        </select>
+        <label for="tags">Tags (comma separated)</label>
+        <input type="text" id="tags" name="tags" placeholder="e.g. javascript, webdev">
+        <label for="content">Content</label>
+        <textarea id="content" name="content" rows="8" required placeholder="Write your blog content..."></textarea>
+        <button type="submit">Publish</button>
+      </form>
+    </section>
+  </main>
+  <script>
+    // Dynamic nav bar
+    const user = JSON.parse(localStorage.getItem("user"));
+    const nav = document.querySelector("nav");
+    nav.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      ${user ? `
+        <a href="blog.html" class="active">Create Blog</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      ` : `
+        <a href="login.html" class="login-btn">Login</a>
+      `}
+    `;
+    if (!user) {
+      window.location.href = "login.html";
+    }
+    if (user) {
+      document.getElementById("logoutBtn").onclick = function() {
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
+      }
+    }
+    document.getElementById("createBlogForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const title = document.getElementById("title").value;
+      const category = document.getElementById("category").value;
+      const tags = document.getElementById("tags").value;
+      const content = document.getElementById("content").value;
+      try {
+        const res = await fetch('http://localhost:5000/api/blog', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, category, content, tags })
+        });
+        if (!res.ok) {
+          alert('Failed to publish blog.');
+          return;
+        }
+        alert("Blog published successfully!");
+        window.location.href = "blogs.html";
+      } catch (err) {
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>

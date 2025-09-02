@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About - NovaBlog</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      min-height: 100vh;
+      font-family: 'Poppins', Arial, sans-serif;
+      transition: background 0.7s;
+    }
+    .navbar {
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 4px 24px rgba(255,111,97,0.10);
+      border-radius: 0 0 1.5rem 1.5rem;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: fadeInDown 1s;
+    }
+    .navbar h1 {
+      color: #ff6f61;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      font-weight: 700;
+      margin: 0;
+      transition: color 0.3s;
+    }
+    nav a {
+      color: #ff6f61;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: 500;
+      font-size: 1.08rem;
+      padding: 0.4rem 1rem;
+      border-radius: 1.2rem;
+      transition: background 0.25s, color 0.25s, box-shadow 0.25s, transform 0.18s;
+      position: relative;
+    }
+    nav a.active, nav a:hover, nav a.login-btn:hover {
+      background: linear-gradient(90deg, #ff9472 0%, #ff6f61 100%);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(255,111,97,0.13);
+      transform: translateY(-2px) scale(1.07);
+    }
+    nav a.login-btn {
+      background: #ff6f61;
+      color: #fff;
+      font-weight: 600;
+      margin-left: 1.5rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .about-section {
+      max-width: 700px;
+      margin: 3rem auto 2rem auto;
+      background: rgba(255,255,255,0.92);
+      border-radius: 2rem;
+      box-shadow: 0 8px 32px rgba(255,111,97,0.13);
+      padding: 3rem 2rem 2.5rem 2rem;
+      text-align: center;
+      animation: fadeIn 1s;
+      transition: box-shadow 0.4s;
+    }
+    .about-section h2 {
+      color: #ff6f61;
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .about-section p {
+      font-size: 1.15rem;
+      color: #444;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+    .about-section ul {
+      text-align: left;
+      margin: 1rem auto;
+      max-width: 350px;
+      color: #444;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    .about-section span {
+      color: #ff6f61;
+      font-weight: 500;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px);}
+      to { opacity: 1; transform: none;}
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: none;}
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <h1>🌟 About</h1>
+    <nav></nav>
+  </header>
+  <main>
+    <section class="about-section">
+      <h2>About NovaBlog</h2>
+      <p>
+        NovaBlog is a vibrant platform for sharing stories, ideas, and knowledge.<br>
+        Whether you're a tech enthusiast, traveler, or storyteller, NovaBlog is your space to connect and inspire.
+      </p>
+      <ul>
+        <li>📝 Create and manage your own blogs</li>
+        <li>🌈 Discover posts from diverse categories</li>
+        <li>💬 Connect with a creative community</li>
+      </ul>
+      <span>Login to start your blogging journey today!</span>
+    </section>
+  </main>
+  <script>
+    // Dynamic nav bar
+    const user = JSON.parse(localStorage.getItem("user"));
+    const nav = document.querySelector("nav");
+    nav.innerHTML = `
+      <a href="index.html">Home</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="about.html" class="active">About</a>
+      <a href="contact.html">Contact</a>
+      ${user ? `
+        <a href="blog.html">Create Blog</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      ` : `
+        <a href="login.html" class="login-btn">Login</a>
+      `}
+    `;
+    if (user) {
+      document.getElementById("logoutBtn").onclick = function() {
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog - NovaBlog</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="navbar">
+    <h1>📝 Blog</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="blog.html">Create</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+  <main class="form-container" id="blogContent"></main>
+  <script>
+// Get blog id from URL
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+const id = getQueryParam('id');
+
+// Fetch the blog from backend
+async function loadBlog() {
+  const blogContent = document.getElementById('blogContent');
+  try {
+    const res = await fetch(`http://localhost:5000/api/blog/${id}`);
+    if (!res.ok) {
+      blogContent.innerHTML = "<h2>Blog not found</h2>";
+      return;
+    }
+    const blog = await res.json();
+    blogContent.innerHTML = `
+      <div class="form-box">
+        <h2 style="color:#ff6f61;">${blog.title}</h2>
+        <span class="category">${blog.category || ""}</span>
+        <p style="margin:1rem 0 2rem 0; color:#444;">${blog.content}</p>
+        <div style="color:#888; font-size:0.95rem;">Posted on: ${blog.date ? new Date(blog.date).toLocaleString() : ""}</div>
+      </div>
+    `;
+  } catch (err) {
+    blogContent.innerHTML = "<h2>Blog not found</h2>";
+  }
+}
+loadBlog();
+  </script>
+</body>
+</html>

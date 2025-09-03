@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS contacts CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
 -- 
--- Table: blogs
+-- Table:blog
 -- 
 CREATE TABLE blogs (
     id SERIAL PRIMARY KEY,

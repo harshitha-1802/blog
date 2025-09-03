@@ -6,9 +6,9 @@ DROP TABLE IF EXISTS blogs CASCADE;
 DROP TABLE IF EXISTS contacts CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
--- ======================
+-- 
 -- Table: blogs
--- ======================
+-- 
 CREATE TABLE blogs (
     id SERIAL PRIMARY KEY,
     title VARCHAR NOT NULL,

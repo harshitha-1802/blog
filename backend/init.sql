@@ -1,5 +1,5 @@
 -- init.sql
--- Creates blogs, contacts, and users tables in PostgreSQL
+-- Creates blogs, contacts, and users tables in PostgreSQL.
 
 -- Drop tables if they already exist (optional)
 DROP TABLE IF EXISTS blogs CASCADE;

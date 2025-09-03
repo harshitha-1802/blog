@@ -27,7 +27,7 @@ db.connect()
   .catch((err) => console.error('PostgreSQL connection error:', err));
 
 // Auto-run init.sql to create tables if they don't exist
-const initSqlPath = path.join(__dirname, 'sql', 'init.sql');
+const initSqlPath = path.join(__dirname, 'init.sql');
 const initSql = fs.readFileSync(initSqlPath, 'utf8');
 
 db.query(initSql)

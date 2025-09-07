@@ -4,7 +4,9 @@
   "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js"
+    "dev": "nodemon backend/server.js",
+    "test": "cypress open",
+    "test:run": "cypress run"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -15,6 +17,7 @@
     "pg": "^8.11.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "cypress": "^12.17.1"
   }
 }

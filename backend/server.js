@@ -21,13 +21,13 @@ const db = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
-// Test DB 
+// Test DB connection
 db.connect()
   .then(() => console.log('✅ PostgreSQL Connected...'))
   .catch((err) => console.error('❌ PostgreSQL connection error:', err));
 
 // Auto-run init.sql to create tables if they don't exist
-const initSqlPath = path.join(__dirname, 'init.sql'); // cleaned conflict
+const initSqlPath = path.join(__dirname, 'init.sql');
 const initSql = fs.readFileSync(initSqlPath, 'utf8');
 
 db.query(initSql)
@@ -44,8 +44,9 @@ app.use('/api/blog', blogRoutes);
 // Contact API
 app.post("/api/contact", async (req, res) => {
   const { name, email, message } = req.body;
-  if (!name || !email || !message)
+  if (!name || !email || !message) {
     return res.status(400).json({ error: "All fields are required." });
+  }
 
   try {
     const query = "INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3)";
@@ -68,5 +69,9 @@ app.get('*', (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(✅ Server running on port ${PORT});
+  console.log(👉 Open: http://localhost:${PORT});  // ✅ Clickable link
+});
+
 module.exports = app; // Optional, useful for testing

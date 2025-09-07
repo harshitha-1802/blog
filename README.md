@@ -21,6 +21,6 @@ A full-stack blog platform with *user authentication, blog management, and conta
 2 Kubernetes: Akshaya(23211A6753)
 3.GCP: Varshitha(23211A6760)
 4.Jenkins: Firdouse(24215a6705)
-5.Coding: Chaitanya(23211a6731)
+5.Coding: Chaitanya(23211a6731) and Harshitha(23211A6709)
 6.Docker: Vaishnavi (23211a6732)
-7.Testing:   Harshitha(23211a6709)
+7.Testing:   Harshitha(23211a6709) 

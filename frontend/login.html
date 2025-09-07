@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +30,8 @@
   </main>
 
   <script>
+    const API_URL = "http://localhost:5000"; // ✅ backend server
+
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("email").value.trim();
@@ -43,30 +46,36 @@
       }
 
       try {
-        const res = await fetch("http://localhost:5500/api/auth/login", {
+        const res = await fetch(${API_URL}/api/auth/login, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
         });
 
-        const data = await res.json();
+        let data;
+        try {
+          data = await res.json();
+        } catch {
+          messageDiv.textContent = "Unexpected server response.";
+          return;
+        }
 
         if (!res.ok) {
-          messageDiv.textContent = data.msg || "Login failed";
+          messageDiv.textContent = data.error || data.msg || "Login failed";
           return;
         }
 
         // Success
         messageDiv.style.color = "green";
-        messageDiv.textContent = data.msg;
+        messageDiv.textContent = data.message || data.msg || "Login successful!";
 
-        // Store JWT token in localStorage
+        // Store JWT token & user
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userEmail", email);
+        localStorage.setItem("user", JSON.stringify(data.user || { email }));
 
-        // Redirect to dashboard
+        // Redirect
         setTimeout(() => {
-          window.location.href = "dashboard.html";
+          window.location.href = "profile.html"; // or dashboard.html
         }, 1000);
 
       } catch (err) {
@@ -77,3 +86,4 @@
   </script>
 </body>
 </html>
+

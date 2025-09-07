@@ -162,7 +162,7 @@
     // Fetch and show only user's blogs (adjust filter as per your backend)
     async function fetchUserBlogs() {
       try {
-        const res = await fetch('http://localhost:5000/api/blog');
+        const res = await fetch('http://localhost:5500/api/blog');
         const blogs = await res.json();
         // Filter by user if your backend supports it (e.g., blog.author === user.username)
         const userBlogs = blogs.filter(blog => blog.author === user.username || blog.email === user.email || true); // Adjust as per your schema

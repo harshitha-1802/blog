@@ -166,7 +166,7 @@
     }
     // Fetch and display all blogs
     async function renderBlogs() {
-      const res = await fetch('http://localhost:5000/api/blog');
+      const res = await fetch('http://localhost:5500/api/blog');
       const blogs = await res.json();
       const blogList = document.getElementById("blogList");
       blogList.innerHTML = blogs.map(blog => `

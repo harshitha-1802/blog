@@ -14,25 +14,25 @@ app.use(cors());
 
 // PostgreSQL connection pool
 const db = new Pool({
-  host: process.env.PG_HOST,
-  user: process.env.PG_USER,
-  password: process.env.PG_PASSWORD,
-  database: process.env.PG_DATABASE,
-  port: process.env.PG_PORT || 5432,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 5432,
 });
 
 // Test DB 
 db.connect()
-  .then(() => console.log('PostgreSQL Connected...'))
-  .catch((err) => console.error('PostgreSQL connection error:', err));
+  .then(() => console.log('✅ PostgreSQL Connected...'))
+  .catch((err) => console.error('❌ PostgreSQL connection error:', err));
 
 // Auto-run init.sql to create tables if they don't exist
-const initSqlPath = path.join(__dirname, 'init.sql');
+const initSqlPath = path.join(__dirname, 'init.sql'); // cleaned conflict
 const initSql = fs.readFileSync(initSqlPath, 'utf8');
 
 db.query(initSql)
-  .then(() => console.log('Tables created or verified'))
-  .catch((err) => console.error('Error initializing tables:', err));
+  .then(() => console.log('✅ Tables created or verified'))
+  .catch((err) => console.error('❌ Error initializing tables:', err));
 
 // Make db accessible in routes
 app.locals.db = db;
@@ -66,8 +66,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-// Start server on Vercel port
+// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
 module.exports = app; // Optional, useful for testing

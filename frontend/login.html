@@ -16,6 +16,7 @@
       <a href="contact.html">Contact</a>
     </nav>
   </header>
+
   <main class="form-container">
     <form class="form-box" id="loginForm">
       <h2>Welcome Back!</h2>
@@ -26,42 +27,51 @@
       <div id="message" style="margin-top:1rem;color:red;"></div>
     </form>
   </main>
+
   <script>
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const messageDiv = document.getElementById("message");
       messageDiv.textContent = "";
+      messageDiv.style.color = "red";
+
+      if (!email || !password) {
+        messageDiv.textContent = "Both fields are required.";
+        return;
+      }
 
       try {
-        const res = await fetch("http://localhost:5000/api/auth/login", {
+        const res = await fetch("http://localhost:5500/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
         });
 
+        const data = await res.json();
+
         if (!res.ok) {
-          const errorData = await res.json();
-          messageDiv.textContent = errorData.error || "Login failed";
+          messageDiv.textContent = data.msg || "Login failed";
           return;
         }
 
-        const data = await res.json();
+        // Success
         messageDiv.style.color = "green";
-        messageDiv.textContent = data.message;
+        messageDiv.textContent = data.msg;
 
-        console.log("User Info:", data.user);
-        // Store user info in localStorage
-        localStorage.setItem("user", JSON.stringify({
-          username: data.user.username,
-          email: data.user.email
-        }));
+        // Store JWT token in localStorage
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userEmail", email);
+
         // Redirect to dashboard
-        window.location.href = "dashboard.html";
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1000);
 
       } catch (err) {
-        messageDiv.textContent = err.message;
+        console.error(err);
+        messageDiv.textContent = "Network error. Please try again.";
       }
     });
   </script>

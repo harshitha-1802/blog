@@ -31,3 +31,6 @@ Thumbs.db
 dist/
 .cache/
 coverage/
+
+# Cypress folder should NOT be ignored so it appears in Git
+# cypress/   <-- DO NOT include this

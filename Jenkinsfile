@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS"   // NodeJS must be configured in Jenkins under Global Tools
+        nodejs "NodeJS"   // Ensure NodeJS is configured under Jenkins -> Global Tool Configuration
     }
 
     stages {
@@ -14,20 +14,20 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'npm test || echo "No tests found, skipping..."'
+                bat 'npm test || echo "No tests found, skipping..."'
             }
         }
 
         stage('Start Backend') {
             steps {
                 echo 'Starting Node.js backend...'
-                sh 'node server.js &'
+                bat 'start /B node server.js'
             }
         }
     }

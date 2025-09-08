@@ -6,11 +6,11 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // This pulls your code from GitHub
-                git branch: 'main', url: 'https://github.com/your-username/your-repo.git'
-            }
+stage('Checkout') {
+    steps {
+        git branch: 'main', url: 'https://github.com/harshitha-1802/blog.git'
+    }
+}
         }
 
         stage('Install Dependencies') {

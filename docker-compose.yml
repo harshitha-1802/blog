@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: novablog-backend
+    ports:
+      - "5500:5000"
+    environment:
+      DB_HOST: novablog-db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: 12553025
+      DB_NAME: novablog
+      JWT_SECRET: supersecretkey
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - novablog-network
+
+  db:
+    image: postgres:17
+    container_name: novablog-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12553025
+      POSTGRES_DB: novablog
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./backend/sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - novablog-network
+
+volumes:
+  db_data:
+
+networks:
+  novablog-network:
+    driver: bridge

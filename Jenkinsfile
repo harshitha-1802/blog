@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     tools {
-    nodejs "Node-20"
-}
-
+        nodejs "Node-20"
+    }
 
     stages {
         stage('Checkout') {
@@ -19,17 +18,17 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                bat "npm run test:run || echo \"No tests found, skipping...\""
-                bat 'npx cypress run || echo "No tests found, skipping..."'
-            }
-        }
-
         stage('Start Backend') {
             steps {
                 echo 'Starting Node.js backend...'
-                bat 'start /B node server.js'
+                bat 'start /B node backend/server.js'
+                sleep time: 5, unit: 'SECONDS' // Wait a bit for the server to start
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                bat 'npx cypress run || echo "No tests found, skipping..."'
             }
         }
     }

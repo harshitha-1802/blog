@@ -5,6 +5,10 @@ pipeline {
         nodejs "Node-20"
     }
 
+    environment {
+        PORT = "5000"
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -18,17 +22,25 @@ pipeline {
             }
         }
 
-        stage('Start Backend') {
-            steps {
-                echo 'Starting Node.js backend...'
-                bat 'start /B node backend/server.js'
-                sleep time: 15, unit: 'SECONDS'  // Wait for backend to start
-            }
-        }
+        stage('Start Backend and Run Tests') {
+            parallel {
+                stage('Start Backend') {
+                    steps {
+                        echo 'Starting Node.js backend...'
+                        bat 'node backend/server.js'
+                    }
+                }
 
-        stage('Run Tests') {
-            steps {
-                bat 'npx cypress run || echo "No tests found, skipping..."'
+                stage('Run Cypress Tests') {
+                    steps {
+                        // Wait for the backend to fully start
+                        echo 'Waiting for backend to be available...'
+                        sleep time: 15, unit: 'SECONDS'
+                        
+                        echo 'Running Cypress tests...'
+                        bat 'npx cypress run || echo "No tests found, skipping..."'
+                    }
+                }
             }
         }
     }
@@ -45,3 +57,4 @@ pipeline {
         }
     }
 }
+

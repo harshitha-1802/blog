@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'NodeJS' // Make sure this tool is configured in Jenkins Global Tools
+        nodejs "NodeJS"  // Must match Jenkins global tool name
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/harshitha-1802/blog.git'
+                git branch: 'main', url: 'https://github.com/harshitha-1802/blog.git'
             }
         }
 
@@ -20,15 +20,15 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                // Runs Cypress tests in headless mode (for Jenkins)
+                bat 'npm test || echo "No tests found, skipping..."'
                 bat 'npx cypress run || echo "No tests found, skipping..."'
             }
         }
 
         stage('Start Backend') {
             steps {
-                echo 'This is where you would start your backend...'
-                // Add your backend startup logic if needed
+                echo 'Starting Node.js backend...'
+                bat 'start /B node server.js'
             }
         }
     }

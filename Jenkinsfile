@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS"  // Must match Jenkins global tool name
-    }
+    nodejs "Node-20"
+}
+
 
     stages {
         stage('Checkout') {

@@ -21,7 +21,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                bat 'npm test || echo "No tests found, skipping..."'
+                bat "npm run test:run || echo \"No tests found, skipping...\""
                 bat 'npx cypress run || echo "No tests found, skipping..."'
             }
         }

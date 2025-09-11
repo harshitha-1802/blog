@@ -70,8 +70,8 @@ app.get('*', (req, res) => {
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(✅ Server running on port ${PORT});
-  console.log(👉 Open: http://localhost:${PORT});  // ✅ Clickable link
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`👉 Open: http://localhost:${PORT}`);  // ✅ Clickable link
 });
 
 module.exports = app; // Optional, useful for testing

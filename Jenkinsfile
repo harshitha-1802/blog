@@ -22,7 +22,7 @@ pipeline {
             steps {
                 echo 'Starting Node.js backend...'
                 bat 'start /B node backend/server.js'
-                sleep time: 5, unit: 'SECONDS' // Wait a bit for the server to start
+                sleep time: 15, unit: 'SECONDS'  // Wait for backend to start
             }
         }
 

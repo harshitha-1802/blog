@@ -7,6 +7,13 @@ pipeline {
 
     environment {
         PORT = "5000"
+
+        // Database environment variables
+        DB_HOST = 'localhost'
+        DB_USER = 'postgres'
+        DB_PASSWORD = credentials('postgres-password-id') // 👈 Jenkins credential ID
+        DB_NAME = 'blogdb'
+        DB_PORT = '5432'
     }
 
     stages {
@@ -33,10 +40,10 @@ pipeline {
 
                 stage('Run Cypress Tests') {
                     steps {
-                        // Wait for the backend to fully start
                         echo 'Waiting for backend to be available...'
-                        sleep time: 15, unit: 'SECONDS'
-                        
+                        // This waits until http://localhost:5000 is up before running Cypress
+                        bat 'npx wait-on http://localhost:5000'
+
                         echo 'Running Cypress tests...'
                         bat 'npx cypress run || echo "No tests found, skipping..."'
                     }

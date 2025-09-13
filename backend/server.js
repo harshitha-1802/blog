@@ -13,13 +13,25 @@ app.use(express.json());
 app.use(cors());
 
 // PostgreSQL connection pool
-const db = new Pool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 5432,
-});
+let db;
+
+if (process.env.DATABASE_URL) {
+  // ✅ Render (production)
+  db = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+} else {
+  // ✅ Local development
+  db = new Pool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT || 5432
+  });
+}
+
 
 // Test DB connection
 db.connect()
